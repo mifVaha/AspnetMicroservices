@@ -52,7 +52,8 @@ services:
     container_name: basket.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "CacheSettings:ConnectionString=basketdb:6379" 
+      - "CacheSettings:ConnectionString=basketdb:6379"
+      - "GrpcSettings:DiscountUrl=http://discount.grpc"
     depends_on:
       - basketdb
     ports:
@@ -67,3 +68,13 @@ services:
       - discountdb
     ports:
       - "8002:8080"
+
+  discount.grpc:
+    container_name: discount.grpc
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "DatabaseSettings:ConnectionString=Server=discountdb;Port=5432;Database=PostgresDB;User Id=admin;Password=admin123" 
+    depends_on:
+      - discountdb
+    ports:
+      - "8003:80"
